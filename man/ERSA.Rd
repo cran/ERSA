@@ -3,8 +3,9 @@
 \docType{package}
 \name{ERSA}
 \alias{ERSA}
-\alias{ERSA-package}
 \title{ERSA: A package exploring regressions with a Shiny app}
 \description{
-ERSA: A package exploring regressions with a Shiny app
+The Exploratory Regression Shiny App (ERSA) package consists of a
+collection of functions for displaying the results of a regression calculation,
+which are then packaged together as a shiny app function.
 }

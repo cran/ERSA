@@ -7,14 +7,25 @@
 \alias{plotCIStats}
 \title{Plots of model summaries}
 \usage{
-plotAnovaStats(fit0, barcols = NULL, preds = NULL, alpha = 0.05,
-  type = "SS", width = 0.3)
+plotAnovaStats(
+  fit0,
+  barcols = NULL,
+  preds = NULL,
+  alpha = 0.05,
+  type = "SS",
+  width = 0.3
+)
 
-plottStats(fit0, barcols = NULL, preds = NULL, alpha = 0.05,
-  width = 0.3)
+plottStats(fit0, barcols = NULL, preds = NULL, alpha = 0.05, width = 0.3)
 
-plotCIStats(fit0, barcols = NULL, preds = NULL, alpha = 0.05,
-  stdunits = FALSE, width = 0.3)
+plotCIStats(
+  fit0,
+  barcols = NULL,
+  preds = NULL,
+  alpha = 0.05,
+  stdunits = FALSE,
+  width = 0.3
+)
 }
 \arguments{
 \item{fit0}{is an lm object}

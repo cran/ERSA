@@ -104,9 +104,9 @@ fselOrder <- function(m,d=NULL,refit=TRUE, maxNPred=NULL) {
 #' @describeIn reorderTerms Reverses order of terms in a fit
 #' @export
 #'
-#' @examples revPredOrd(lm(mpg~wt+hp+disp, data=mtcars))
+#' @examples revPredOrder(lm(mpg~wt+hp+disp, data=mtcars))
 
-revPredOrd <- function(m, d=NULL,refit=TRUE){
+revPredOrder <- function(m, d=NULL,refit=TRUE){
 	# does not make sense for models with interactions, but fitting lm will reorder them?
   # predord <- names(model.frame(m))[-1]
   if (is.null(d)) d <- extractModelData(m)
@@ -369,7 +369,11 @@ checkERModel <- function(m){
 
 #' @param npcpCols number of colours for the PCP
 #' @param pvalOrder if TRUE, re-arranges predictors in order of p-value
-#' @return the shiny server
+#' @param tablesOnly if TRUE, shows Plots 1-3 only.
+#' @param displayHeight supply a value for the display height
+#' @param gadget If TRUE, constructs a gadget, otherwise a shinyApp.
+#' @param viewer For gadget, defaults to "dialogViewer". May be "paneViewer" or "browserViewer"
+#' @return the result
 #' @export
 #'
 #' @examples
@@ -377,16 +381,49 @@ checkERModel <- function(m){
 #' \dontrun{exploreReg(f)}
 #'
 exploreReg <- function(ERmfull,ERdata=NULL, ERbarcols=RColorBrewer::brewer.pal(4, "Set2"),
-                       npcpCols = 4,pvalOrder=F) {
+                       npcpCols = 4,pvalOrder=F, tablesOnly=F, displayHeight=NULL,
+                       gadget=TRUE,
+                       viewer="dialogViewer") {
   if (!checkERModel(ERmfull))
     stop("ERmfull must be an unweighted lm")
-  ui <- createERUI()
+  ui <- createERUI(tablesOnly=tablesOnly, gadget=gadget)
   if (is.null(ERdata)) ERdata <- extractModelData(ERmfull)
+
  server <- createERServer(ERmfull, ERdata,ERbarcols, npcpCols,pvalOrder)
-  shiny::shinyApp(ui, server,options=list(
-    width="100%", height=900
-  ))
+
+ if (is.null(displayHeight))
+   displayHeight <- if (tablesOnly) 400 else 700
+  # shiny::shinyApp(ui, server,options=list(
+  #  width="100%", height=displayHeight))
+
+  # runGadget(ui, server,  viewer = browserViewer())
+    if (interactive() & gadget){
+    if (viewer=="dialogViewer")
+    runGadget(ui, server, viewer = dialogViewer("Explore Regression",width=700,height=displayHeight))
+    else if (viewer=="paneViewer")
+      runGadget(ui, server, viewer = paneViewer())
+    else runGadget(ui, server, viewer = browserViewer())
+    }
+ else shiny::shinyApp(ui, server,options=list(
+   width="100%", height=displayHeight))
 }
 
+
+exploreReg1 <- function(ERmfull,ERdata=NULL, ERbarcols=RColorBrewer::brewer.pal(4, "Set2"),
+                       npcpCols = 4,pvalOrder=F, tablesOnly=F, displayHeight=NULL) {
+  if (!checkERModel(ERmfull))
+    stop("ERmfull must be an unweighted lm")
+  ui <- createERUIa(tablesOnly=tablesOnly)
+  if (is.null(ERdata)) ERdata <- extractModelData(ERmfull)
+
+  server <- createERServer(ERmfull, ERdata,ERbarcols, npcpCols,pvalOrder)
+
+  if (is.null(displayHeight))
+    displayHeight <- if (tablesOnly) 500 else 950
+  shiny::shinyApp(ui, server,options=list(
+    width="100%", height=displayHeight))
+  # runGadget(ui, server, viewer = dialogViewer("Explore Regression",width=700,height=700))
+
+}
 
 

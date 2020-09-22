@@ -5,7 +5,7 @@
 \alias{pvalOrder}
 \alias{bselOrder}
 \alias{fselOrder}
-\alias{revPredOrd}
+\alias{revPredOrder}
 \alias{randomPredOrder}
 \alias{regsubsetsOrder}
 \title{Re-order model terms}
@@ -16,7 +16,7 @@ bselOrder(m, d = NULL, refit = TRUE, maxNPred = NULL)
 
 fselOrder(m, d = NULL, refit = TRUE, maxNPred = NULL)
 
-revPredOrd(m, d = NULL, refit = TRUE)
+revPredOrder(m, d = NULL, refit = TRUE)
 
 randomPredOrder(m, d = NULL, refit = TRUE)
 
@@ -47,7 +47,7 @@ Re-order model terms
 
 \item \code{fselOrder}: Forwards selection
 
-\item \code{revPredOrd}: Reverses order of terms in a fit
+\item \code{revPredOrder}: Reverses order of terms in a fit
 
 \item \code{randomPredOrder}: Reorders terms in a fit randomly
 
@@ -57,7 +57,7 @@ Re-order model terms
 \examples{
 bselOrder(lm(mpg~wt+hp+disp, data=mtcars))
 fselOrder(lm(mpg~wt+hp+disp, data=mtcars))
-revPredOrd(lm(mpg~wt+hp+disp, data=mtcars))
+revPredOrder(lm(mpg~wt+hp+disp, data=mtcars))
 randomPredOrder(lm(mpg~wt+hp+disp, data=mtcars))
 regsubsetsOrder(lm(mpg~wt+hp+disp, data=mtcars))
 }

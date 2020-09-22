@@ -4,8 +4,16 @@
 \alias{pcpPlot}
 \title{A PCP plot of the data, residuals or hat values from regression fits}
 \usage{
-pcpPlot(data, fit, type = "Variables", npcpCols = 4, resDiff = F,
-  absResid = F, sequential = F, selnum = NULL)
+pcpPlot(
+  data,
+  fit,
+  type = "Variables",
+  npcpCols = 4,
+  resDiff = F,
+  absResid = F,
+  sequential = F,
+  selnum = NULL
+)
 }
 \arguments{
 \item{data}{a data frame}

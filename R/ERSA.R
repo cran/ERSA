@@ -2,6 +2,9 @@
 #'
 #' @docType package
 #' @name ERSA
+#' @description The Exploratory Regression Shiny App (ERSA) package consists of a
+#' collection of functions for displaying the results of a regression calculation,
+#' which are then packaged together as a shiny app function.
 NULL
 
 
