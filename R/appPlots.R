@@ -55,8 +55,8 @@ plotAnovaStats <- function(fit0, barcols=NULL,preds=NULL, alpha=.05, type="SS",w
   ssadj0$termnum <- match(ssadj0$term, levels(ssadj0$term))
   ssadj0$termnum1 <- ssadj0$termnum-.45
   ssadj0$termnum2 <- ssadj0$termnum+.45
-  p0 <- ggplot(data = ssadj0, aes_string(x = "term", y = "xvar")) +
-    geom_col(aes_string(fill = "term"), width=width)  +
+  p0 <- ggplot(data = ssadj0, aes(x = .data$term, y = .data$xvar)) +
+    geom_col(aes(fill = .data$term), width=width)  +
     ylab(ylab) + xlab("")+ guides(fill = F) + coord_flip()
 
 
@@ -64,7 +64,7 @@ plotAnovaStats <- function(fit0, barcols=NULL,preds=NULL, alpha=.05, type="SS",w
     p0 <- p0 + scale_fill_manual(values = barcols, limits = preds)
 
   p0 +
-    geom_segment(aes_string(x = "termnum1", y = "siglevel", xend = "termnum2", yend = "siglevel"), color = "darkred",
+    geom_segment(aes(x = .data$termnum1, y = .data$siglevel, xend = .data$termnum2, yend = .data$siglevel), color = "darkred",
                  linetype = "dashed") +geom_hline(yintercept=0, color="grey30", size=1)
 
 }
@@ -107,17 +107,17 @@ plottStats <- function(fit0, barcols=NULL,preds=NULL, alpha=.05, width=.3){
   ssadj0$termnum1 <- ssadj0$termnum-.45
   ssadj0$termnum2 <- ssadj0$termnum+.45
 
-  p0 <- ggplot(data = ssadj0, aes_string(x = "term", y = "statistic")) +
-    geom_col(aes_string(fill = "term"), width=width)  +
+  p0 <- ggplot(data = ssadj0, aes(x = .data$term, y = .data$statistic)) +
+    geom_col(aes(fill = .data$term), width=width)  +
     ylab("t statistic") + xlab("")+ guides(fill = FALSE) + coord_flip()
 
   if (! is.null(barcols))
     p0 <- p0 + scale_fill_manual(values = barcols, limits = preds)
 
   p0 <- p0 +
-    geom_segment(aes_string(x = "termnum1", y = "siglevel", xend = "termnum2", yend = "siglevel"), color = "darkred",
+    geom_segment(aes(x = .data$termnum1, y = .data$siglevel, xend = .data$termnum2, yend = .data$siglevel), color = "darkred",
                  linetype = "dashed")+
-    geom_segment(aes_string(x = "termnum1", y = "-siglevel", xend = "termnum2", yend = "-siglevel"), color = "darkred",
+    geom_segment(aes(x = .data$termnum1, y = -.data$siglevel, xend = .data$termnum2, yend = -.data$siglevel), color = "darkred",
                  linetype = "dashed") +
     geom_hline(yintercept=0, color="grey30", size=1)
   p0
@@ -142,15 +142,15 @@ plotSeqSS <- function(fits,barcols=NULL, legend=F){
   mseq <- bind_model_tables(fits,anova)
 
   if (is.null(barcols)){
-    p2 <- ggplot(data = mseq, aes_string(x = "model", y = "sumsq")) +
-      geom_col(aes_string(fill = "term")) +
+    p2 <- ggplot(data = mseq, aes(x = .data$model, y = .data$sumsq)) +
+      geom_col(aes(fill = .data$term)) +
       guides(fill=F)  + theme(axis.ticks.x = element_blank())
   }
   else {
   mseq <- correctTerms(mseq, names(barcols))
   barcols1 <- barcols[names(barcols) %in% mseq$term]
   barcols2 <- barcols[mseq$term] # for the plot
-  p2 <- ggplot(data = mseq, aes_string(x = "model", y = "sumsq")) +
+  p2 <- ggplot(data = mseq, aes(x = .data$model, y = .data$sumsq)) +
     geom_col(aes(fill = "red"), width=.5)  +
     scale_fill_manual(values = barcols1,
                       limits = names(barcols1)) +
@@ -355,15 +355,15 @@ plotCIStats <- function(fit0, barcols=NULL,preds=NULL, alpha=.05, stdunits=FALSE
   ci$term <- factor(ci$term , levels=union(preds, ci$term))
   ci$termnum <- match(ci$term, levels(ci$term))
   ci$center <- (ci$cil+ci$ciu)/2
-  p0 <- ggplot(data = ci, aes_string(y = "termnum", yend="termnum", x = "ciu", xend="cil")) +
-    geom_segment(aes_string(colour = "term"), size=30*width)  +
+  p0 <- ggplot(data = ci, aes(y = .data$termnum, yend=.data$termnum, x = .data$ciu, xend=.data$cil)) +
+    geom_segment(aes(colour = .data$term), size=30*width)  +
      xlab("Confint") + ylab("")+
     guides(colour = FALSE)
 
   if (! is.null(barcols))
     p0 <- p0 + scale_colour_manual(values = barcols, limits = preds)
 
-  p0 + geom_point(aes_string(y = "termnum", x = "center"), fill="black",size=15*width)+
+  p0 + geom_point(aes(y = .data$termnum, x = .data$center), fill="black",size=15*width)+
     scale_y_continuous(breaks=ci$termnum,labels=ci$term) +
     geom_vline(xintercept=0, color="grey30", size=1)
 }
@@ -409,9 +409,8 @@ pcpPlot <- function(data, fit,  type="Variables", npcpCols=4, resDiff=F, absResi
   cols <- pcpColors(fit, type, npcpCols,absResid)
   r <- regPCPdata(fit,data,type,resDiff,absResid, color=cols$color, sequential=sequential)
   dg <- r$pcp_data
-  #dsel <- dplyr::filter(dg , case %in% selnum)
   dsel <- dg[dg$case%in% selnum, ]
-  ggplot(dg, aes_string(x = "varn", y = "val", group = "case",color="color")) +
+  ggplot(dg, aes(x = .data$varn, y = .data$val, group = .data$case,color=.data$color)) +
     geom_line() + xlim(levels(dg$var))+ ylab(r$ylab) +
     geom_line(data = dsel, color="magenta", size=1.5) + xlab("") +labs(colour= cols$clab)
 }

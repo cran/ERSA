@@ -41,19 +41,19 @@ Re-order model terms
 }
 \section{Functions}{
 \itemize{
-\item \code{pvalOrder}: Arranges model terms in order of increasing p-value
+\item \code{pvalOrder()}: Arranges model terms in order of increasing p-value
 
-\item \code{bselOrder}: Arranges model terms using backwards selection
+\item \code{bselOrder()}: Arranges model terms using backwards selection
 
-\item \code{fselOrder}: Forwards selection
+\item \code{fselOrder()}: Forwards selection
 
-\item \code{revPredOrder}: Reverses order of terms in a fit
+\item \code{revPredOrder()}: Reverses order of terms in a fit
 
-\item \code{randomPredOrder}: Reorders terms in a fit randomly
+\item \code{randomPredOrder()}: Reorders terms in a fit randomly
 
-\item \code{regsubsetsOrder}: Best subsets regression.
+\item \code{regsubsetsOrder()}: Best subsets regression.
+
 }}
-
 \examples{
 bselOrder(lm(mpg~wt+hp+disp, data=mtcars))
 fselOrder(lm(mpg~wt+hp+disp, data=mtcars))

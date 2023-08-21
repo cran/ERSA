@@ -97,7 +97,7 @@ cislimits <- function(m, d=NULL) {
 #' @return a function
 #' @import shiny
 #' @import  miniUI
-#'
+#' @importFrom rlang .data
 
 createERServer <- function(ERfit,ERdata=NULL,ERbarcols=RColorBrewer::brewer.pal(4, "Set2"),ERnpcpCols=4,  pvalOrder=F){
 
@@ -105,9 +105,6 @@ createERServer <- function(ERfit,ERdata=NULL,ERbarcols=RColorBrewer::brewer.pal(
     stop("ERfit must be an lm and not a glm")
   if (is.null(ERdata)) ERdata <- extractModelData(ERfit)
 function(input, output,session) {
-  # mfull <- ERfit
-  # barcols <- ERbarcols
-  # npcpCols <- ERnpcpCols
 
   ERtermcols <- NULL
   plotAlims <-  NULL
@@ -162,27 +159,6 @@ function(input, output,session) {
     else fit
   }
 
-  # observeEvent(input$sourceF, {
-  #   source(input$sourceF$datapath, local=T)
-  #   if (!checkERModel(ERfit))
-  #     stop("Source file must contain an unweighted lm")
-  #   session$reload()
-  #
-  # })
-
-  # observeEvent(input$build_model, {
-  #   newlm <- input$newlm
-  #   newmod <- eval(parse(text=newlm))
-  #    if (!checkERModel(newmod)){
-  #      print("Text does not evaluate to an unweighted lm")
-  #   }
-  #    else {
-  #     ERfit <<-newmod
-  #     session$reload()
-  #   }
-  # })
-
-
   observeEvent(input$all_terms, {
     terms0 <- attr(terms(ERfit), "term.labels")
 
@@ -235,19 +211,6 @@ function(input, output,session) {
 
 
 
-  # observeEvent(input$plot_hoverS, {
-  #  ft1 <- tidy(anova(rv$fit1))
-  #  r1 <- ft1$sumsq
-  #  r1 <- (1 - last(r1)/sum(r1))*100
-  #  r1 <- format(r1, digits=3)
-  #  mse <- format(sqrt(last(ft1$meansq)/last(ft1$df)),digits=2)
-  #   ft2 <- tidy(anova(rv$fit2))
-  #   infoString1 <- paste("Plot2:",paste(ft1$term,sapply(ft1$sumsq, format, digits=2), collapse=" "),
-  #                        paste0("Rsq ", r1, "%", " MSE ", mse))
-  #   infoString2 <- paste("Plot3:",paste(ft2$term,sapply(ft2$sumsq, format, digits=2), collapse=" "),
-  #                        paste0("Rsq ", r1, "%", " MSE ", mse))
-  #   rd$infoString <- paste0(infoString1,"\n", infoString2)
-  # })
 
   observeEvent(input$plot_clickS, {
     click <- input$plot_clickS
@@ -408,13 +371,7 @@ function(input, output,session) {
       # can get rig of with suppressMessages(print but that affects coordinate system
       # next line gets rid of message
       p$coordinates$default<- TRUE
-      # print("plot")
-      # print(plimsx)
-      # print("fixed")
-      # print(plotAlims$tstat$x.range)
-      # print("---")
-      # if (plimsx[1] < plotAlims$tstat$x.range[1] | plimsx[2] > plotAlims$tstat$x.range[2])
-      #   print("t stat plot is clipped")
+
       p+   coord_flip(ylim=plotAlims$tstat$x.range, xlim=plotAlims$tstat$y.range, expand=F)
 
       }
@@ -516,7 +473,6 @@ function(input, output,session) {
 
 
   output$pcp <- renderPlot({
-    # print("rendering pcp")
     mdata <- rd$mdata
     resD <- "diff" %in% input$Res
     resA <- "abs" %in% input$Res
@@ -535,10 +491,7 @@ function(input, output,session) {
     sel <-  rd$sel
     # dsel <- dplyr::filter(dg , case %in% sel$case)
     dsel <- dg[dg$case%in% sel$case, ]
-    # ggplot(dg, aes_string(x = "varn", y = "val", group = "case",color="color")) +
-    #   geom_line() + xlim(levels(dg$var))+ ylab(r$ylab)  + xlab("") +labs(colour= cols$clab) +
-    #   geom_line(data = dsel, color="magenta", size=1.5)
-    ggplot(dg, aes_string(x = "varn", y = "val", group = "case",color="color")) +
+     ggplot(dg, aes(x = .data$varn, y = .data$val, group = .data$case,color=.data$color)) +
       geom_line()+ ylab(r$ylab)  +labs(colour= cols$clab)+
       geom_line(data = dsel, color="magenta", size=1.5)+
       scale_x_continuous("", breaks= seq(along=levels(dg$var)), labels=levels(dg$var))
@@ -553,11 +506,6 @@ function(input, output,session) {
   })
 
 
-  # output$mytitle <- renderText({
-  #   if (!is.null(comment(ERfit)))
-  #     comment(ERfit)
-  #   else "Explore regression model"
-  # })
 
 }
 

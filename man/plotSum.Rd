@@ -50,13 +50,13 @@ Plots of model summaries
 }
 \section{Functions}{
 \itemize{
-\item \code{plotAnovaStats}: Plots barchart of F or SS from lm
+\item \code{plotAnovaStats()}: Plots barchart of F or SS from lm
 
-\item \code{plottStats}: Plots barchart of t stats from lm
+\item \code{plottStats()}: Plots barchart of t stats from lm
 
-\item \code{plotCIStats}: Plots confidence intervals from lm
+\item \code{plotCIStats()}: Plots confidence intervals from lm
+
 }}
-
 \examples{
 plotAnovaStats(lm(mpg ~ wt+hp+disp, data=mtcars))
 plottStats(lm(mpg ~ wt+hp+disp, data=mtcars))
